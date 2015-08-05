@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Welcome | Renren for Chrome</title>
+    <style type="text/css">
+      body {
+	  font-family: 'Lucida Grande', Tahoma, Verdana, Arial, sans-serif;
+	  font-size: 13px;
+	  text-shadow: 0px 1px 0px #fff;
+	  color: #333;
+	  background-color: #fff;
+	  padding: 0px;
+	  margin: 0px;
+	  overflow-x: hidden;			
+      }
+
+      #header {
+	  padding: 20px;
+	  background-color: #005EAC;
+	  color: #fff;
+	  text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+	  border-bottom: 1px solid rgba(0,0,0,0.3);
+	  -webkit-box-shadow: 0px 3px 0px rgba(0,0,0,0.2);	
+      }
+
+      p,.p {
+	  margin: 10px 0px;
+	  padding: 0px 7px;
+      }
+
+      .breakline {
+	  background-color: rgba(0,0,0,0.3);
+	  border-bottom: 1px solid rgba(255,255,255,0.4);
+	  margin: 10px 0px;
+	  height: 1px;
+      }
+
+      .title {
+	  line-height: 48px;
+	  font-size: 15px;	  
+	  font-weight: bold;
+      }				
+      
+      .title img {
+	  vertical-align: middle;
+	  margin-right: 5px;
+      }
+      
+      #changelog {
+      	padding: 15px 25px
+      }
+    </style>
+	<script type="text/javascript">
+function createXmlHttp(){
+  // Mozilla, Firefox, Safari, IE7
+  if (window.XMLHttpRequest) {
+    return new XMLHttpRequest();
+  } else if (window.ActiveXObject) {
+    // IE5, IE6
+    try {
+      return new ActiveXObject("Msxml2.XMLHTTP");
+    } catch(e) {
+      return new ActiveXObject("Microsoft.XMLHTTP");
+    }
+  } else {
+    return null;
+  }
+}
+
+window.onload = function(){
+	var xhr = createXmlHttp();
+	xhr.open("GET", "./changelog.txt", true);
+	xhr.onload = function() {
+		document.getElementById("changelog").innerText = xhr.responseText;
+	};
+	xhr.send(null);
+}
+    </script>  
+  </head>
+  <body>
+    <div id="header">
+      <div class="title">
+	<img src="img/logo.png" style="width:60px;height:60px"></img>
+	<script type="text/javascript">
+	  if(window.location.hash == "#loggedin") {
+	      document.write("你已经登陆成功了，开始使用吧!");
+	  } else {
+	      document.write("Welcome to Renren for Chrome");
+	  }
+	</script>
+      </div>
+      <div class="breakline"></div>
+      <p>直接方便地在Chrome工具栏上使用Renren，来浏览你的新鲜事，发布你的状态，评论好友的状态等。</p>
+      <p>请单击Chrom右上方的工具栏中的<img src="img/icon18.png"  style="vertical-align:text-bottom"></img>图标来使用这个插件。</p>
+    </div>
+    <div id="changelog"></div>
+  </body>
+</html>

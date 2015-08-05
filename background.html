@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>Background | Renren for Chrome</title>
+    <script type="text/javascript" src="js/MD5.js"></script>
+    <script type="text/javascript" src="js/renren.js"></script>
+    <script type="text/javascript">
+  	<!--
+	/* Change this if you want to invalidate the localstorage cache */
+	var VERSION = "1.0.7";
+	if(!localStorage.version || localStorage.version != VERSION){
+		localStorage.clear();
+		localStorage.version = VERSION;
+	}
+	
+	/* First run: Loads welcome.html */
+	if(!localStorage.firstRun) {
+		localStorage.firstRun = false;
+		window.open("welcome.html");
+	}
+	
+	/* Listen for session.js to send a request with a access_token, then store it in localStorage */
+	chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+	    if(request.isRenrenExt == true) {
+	        try{
+	            // 从url参数中取得想要的部分
+	            var params = (function(a) {
+	                if (a == "") return {};
+	                var b = {};
+	                for (var i = 0; i < a.length; ++i)
+	                {
+	                    var p=a[i].split('=');
+	                    if (p.length != 2) continue;
+	                    b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+	                }
+	                return b;
+	            })(request.session.substr(1).split('&'));
+	            
+	            var timeNow = new Number(Date.now());//单位毫秒
+	            var timeExpireUp = new Number(params["expires_in"]);//单位秒
+	            var timeExpired = timeNow + timeExpireUp * 1000;
+
+	            // 储存access_token和过期期限,[0]是权限列表
+	            localStorage.rr_token_expire = timeExpired.toString();
+	            localStorage.rr_access_token = params["access_token"];
+
+	            // 登陆成功
+	            if(localStorage.rr_access_token && localStorage.rr_access_token != "false"){
+	                chrome.browserAction.setPopup({"popup":"popup.html"});
+	                window.open(chrome.extension.getURL("welcome.html") + "#loggedin", "welcome");
+	            }
+	            sendResponse({});
+	        }catch(e){
+	            console.log(e);
+	            localStorage.rr_access_token = false;
+	            localStorage.rr_token_expire = 0;
+	            sendResponse({});
+	        }
+	    }
+	    return {};
+	});
+	
+	/* If there is a access_token and not expired, open the popup; otherwise make a login action */
+	if(RR.token()) {
+		chrome.browserAction.setPopup({"popup":"popup.html"});
+	}
+	chrome.browserAction.onClicked.addListener(function() {
+		if(!RR.token()){
+			chrome.browserAction.setPopup({"popup":""});
+	        RR.login();
+	    }
+	});
+	
+	/* Check users notification (future work: popup chrome notification)
+	var lastNotificationCount = 0;
+	function checkNotifs() {
+	  if(RR.token()) {
+	    // 向Renren服务器定期发送请求查询新通知
+	      RR.api({
+	        // 传递通知api需要的参数
+	      }，
+	      function(res){
+	        if(res.error_code){
+	          // 请求传递回来一个错误代码的情况时，设置下次用户点击时重新更新access_token
+	          localStorage.rr_access_token = false;
+	          chrome.browserAction.setPopup({"popup":""});
+	        }else{
+	          chrome.browserAction.setPopup({"popup":"popup.html"});
+	          // 更新icon的数字提示 (res.notifications是返回的JSON内容，要根据renren的api返回内容修改）
+	          // localStorage.notificationCount = res.notifications.length;
+	          // chrome.extension.sendrequest({updateNotifications:true, count: res.notifications.length});
+	          if(res.notification.length > 0){
+	            chrome.browserAction.setBadgeText({"text":("" + res.notifications.length)});
+	            lastNotificationCount = res.notifications.length;
+	          }else{
+	            chrome.browserAction.setBadgeText({"text":""});
+	          }
+	        }
+	      });
+	  }
+	}
+	*/
+	/* Start the notification checker
+	setInterval(checkNotifs, 15000);
+	checkNotifs();
+	*/
+    -->
+	</script>
+	<!--Next line is added by Fortable1999-->
+	<script type="text/javascript" src="js/mouseAction.js"></script>
+  </head>
+  <body>
+  </body>
+</html>

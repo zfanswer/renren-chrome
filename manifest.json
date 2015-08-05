@@ -1,0 +1,35 @@
+﻿{
+ "name": "人人 for Chrome™",
+ "version": "1.0.7",
+ 
+ "description": "为人人网(renren.com)带来全系统平台的人人桌面般的体验，直接方便地在Chrome工具栏上使用Renren，来浏览你的新鲜事，发布你的状态，评论好友的状态，还有浏览器内签到功能等众多功能!",
+ "icons": {
+	"16": "img/icon16.png",
+	"48": "img/logo.png",
+	"128": "img/logo.png"
+	},
+
+ "browser_action": {
+	"default_icon": "img/icon18.png",
+	"default_title": "Renren for Chrome"
+	},
+ 
+ "background_page": "background.html",
+
+ "content_scripts": [{
+ 	"js": [ "js/session.js" ],
+ 	"matches": [
+		"http://graph.renren.com/oauth/login_success.html*",
+		"https://graph.renren.com/oauth/login_success.html*"
+		]
+ }],
+
+ "permissions": [
+	"http://api.renren.com/",
+	"unlimitedStorage",
+	"geolocation",
+	"notifications",
+	"tabs",
+	"contextMenus"
+	]
+}

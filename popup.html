@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Popup | Renren for Chrome</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <script type="text/javascript" src="js/MD5.js"></script>
+    <script type="text/javascript" src="js/renren.js"></script>
+    <script type="text/javascript" src="js/pages.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/template.js"></script>
+	<style type="text/css">
+	  body {
+	  	margin: 0px;
+		padding: 0px;
+		font-family: 'Lucida Grande', Tahoma, Verdana, Arial, sans-serif;
+		font-size: 12px;
+		color: #111;
+		min-width: 500px;
+		width: 500px;
+		height: 540px;
+		min-height: 540px;
+		max-height: 540px;
+		overflow: hidden;
+		border: 1px solid #ddd;
+		-webkit-border-radius: 5px;
+		background-color: #fff;
+	  }
+	</style>
+  </head>
+  <body>
+    <div id="type_dropdown">
+    	<div id="type_1" onclick="selectPublisherType(this)"><img src="img/status.png"/><span>状态</span></div>
+    	<div id="type_2" onclick="selectPublisherType(this)"><img src="img/share.png"/><span>链接</span></div>
+    	<div id="type_3" onclick="selectPublisherType(this)"><img src="img/video.png"/><span>视频</span></div>
+    	<div id="type_4" onclick="selectPublisherType(this)"><img src="img/checkin.gif"/><span>签到</span></div>
+    	<!-- 暂不支持读取文件 <img src="img/album.png"/><span>相册</span> -->
+    </div>
+    <ul id="nav">
+    	<li id="profile_icon" onclick="shwoMyfeedPage(this)"><div id="profilepic"></div></li>
+    	<!-- <li id="notifications_icon" onclick="showNotificationsPage(this)">
+    		<img src="img/notifications.gif"/><div>通知</div>
+    		<div id="notification_count">
+    		<script type="text/javascript">
+    			/*try{
+        			document.write(localStorage.notificationCount);
+    			}catch(e){}*/
+    		</script>
+    		</div>
+    	</li> -->
+    	<li id="newsfeed_icon" title="新鲜事" onclick="showNewsfeedPage(this)"><img src="img/newsfeed.png"/><div>新鲜事</div></li>
+    	<!-- 新鲜事分类列表 -->
+    	<li id="status_icon" class="navi_sublist" title="状态" onclick="showStatusPage(this)"><img src="img/status.png"/><div>状态</div></li>
+    	<li id="album_icon" class="navi_sublist" title="相册" onclick="showAlbumPage(this)"><img src="img/album.png"/><div>相册</div></li>
+    	<li id="blog_icon" class="navi_sublist" title="日志" onclick="showBlogPage(this)"><img src="img/blog.png"/><div>日志</div></li>
+    	<li id="share_icon" class="navi_sublist" title="分享" onclick="showSharePage(this)"><img src="img/share.png"/><div>分享</div></li>
+    	<li id="public_icon" class="navi_sublist" title="公共主页" onclick="showPublicPage(this)"><img src="img/public.png"/><div>公共主页</div></li>
+    	<!-- 新鲜事分类列表结束 -->
+    	<!-- 暂不支持 <li id="mycomments_icon" title="留言板" onclick="showMycommentsPage(this)"><img src="img/mycomments.gif"/><div>留言板</div></li> -->
+    	<!-- 暂不支持 <li id="inbox_icon" title="站内信" onclick="showInboxPage(this)"><img src="img/inbox.png"/><div>站内信</div></li> -->
+    	<li id="friends_icon" title="好友" onclick="showFriendsPage(this)"><img src="img/friends.png"/><div>好友</div></li>
+    </ul>
+    <div id="content">
+    	<div class="page" id="newpost">
+    		<div id="publisher">
+    			<input type="hidden" id="publisher_mode" value="status"/>
+    			<div id="publisher_inner">
+    				<div id="type_select" onclick="dropdownList()">
+    					<img src="img/status.png"/><span>状态</span>
+    				</div>
+    				<div id="newpost_text_wrap">
+    					<textarea id="publisher_text" placeholder="你正在干嘛？" rows="1" resize="none"></textarea>
+    					<!-- 签到 -->
+    					<div id="places_dropdown_wrap">
+    						<select id="places_dropdown"></select>
+    						<div id="places_toinput">
+    							<a href="#" onclick="places_listToinput()" style="padding-left:6px">添加</a>
+    							<a href="#"	onclick="places_remove()" style="padding-left:4px">删除</a>
+    						</div>
+    						<input id="places_text" type="text" placeholder="你正在哪儿呢？" style="width:80%;display:none"/>
+    						<input id="places_latitude" type="hidden" />
+    						<input id="places_longitude" type="hidden" />
+    					</div>
+    				</div>
+    				<div>
+    					<input type="button" class="button" id="post_button" value="发布" onmousedown="buttonDown(this)" onmouseup="buttonUp(this)" onmouseout="buttonOut(this)" onclick="publish()"/>
+    				</div>
+    			</div>
+    			<!-- 保存被回复者id -->
+    			<input type="hidden" id="replyTarget"/>
+    		</div>
+    	</div>
+    	<div class="page" id="friendsort">
+    		<input id="friendsort_text" type="text" placeholder="输入名字查找好友" onkeyup="searchFriends(this)"/>
+    	</div>
+    	<ul class="page" id="notifications"></ul>
+    	<ul class="page" id="newsfeed"></ul>
+    	<!-- 新鲜事子分类页面 -->
+    	<ul class="page" id="status"></ul>
+    	<ul class="page" id="album"></ul>
+    	<ul class="page" id="blog"></ul>
+    	<ul class="page" id="share"></ul>
+    	<ul class="page" id="public"></ul>
+    	<!-- 子分类页面结束 -->	
+    	<ul class="page" id="myfeed"></ul>
+    	<!-- 暂不支持 <ul class="page" id="mycomments"></ul> -->
+    	<!-- 暂不支持 <ul class="page" id="inbox"></ul>  -->
+    	<ul class="page" id="friends"></ul>
+    </div>
+    <div id="loader"><img src="img/ajax-loading.gif"/></div>
+    <div id="popup_wrap">
+    	<div id="popup">
+    		<div id="popup_content"></div>
+    	</div>
+    </div>
+  </body>
+</html>
